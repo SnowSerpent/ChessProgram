@@ -12,9 +12,8 @@ public class Engine extends Canvas implements Runnable {
     private Window window;
     public GameManager gameManager;
     
-    private double tps = 60;
     private boolean running;
-
+    private double tps = 60;
     private int tickCount;
     private int frameCount;
     private long timer;
@@ -77,11 +76,11 @@ public class Engine extends Canvas implements Runnable {
         }
     }
 
-    public void tick() {
-        // TODO: Maybe make something here
+    private void tick() {
+        // TODO: Make this
     }
 
-    public void render() {
+    private void render() {
         window.render();
     }
 }

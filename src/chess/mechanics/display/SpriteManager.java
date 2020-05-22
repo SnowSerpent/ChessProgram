@@ -9,9 +9,11 @@ import javax.imageio.ImageIO;
 public class SpriteManager {
 
     public static BufferedImage pieces;
+    public static BufferedImage board;
     
     public SpriteManager() {
         pieces = loadSheet("pieces");
+        board = loadSheet("board");
     }
 
     private BufferedImage loadSheet(String path) {

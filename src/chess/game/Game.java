@@ -3,72 +3,124 @@ package chess.game;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import chess.game.pieces.Alliance;
-import chess.game.pieces.Piece;
-import chess.game.pieces.PieceManager;
-import chess.game.pieces.Type;
-import chess.game.pieces.units.Bishop;
-import chess.game.pieces.units.King;
-import chess.game.pieces.units.Knight;
-import chess.game.pieces.units.Pawn;
-import chess.game.pieces.units.Queen;
-import chess.game.pieces.units.Rook;
+import chess.game.aspects.Board;
+import chess.game.aspects.Player;
+import chess.game.aspects.pieces.Alliance;
+import chess.game.aspects.pieces.PieceManager;
+import chess.game.aspects.pieces.Type;
 
 public class Game {
     
     private PieceManager pieceManager;
     private Board board;
 
+    // TODO: Have a Boolean turn variable to decide who's turn it is then have a function to getCurrentPlayer() that returns the player based on the turn
+    private Player player1;
+    private Player player2;
+    private Boolean turn;
+
     public Game() {
-        pieceManager = new PieceManager();
-        board = new Board();
 
-        // TODO: Might want to have this look at a saved game
-        init();
+        // TODO: Make player classes to store what player is the alliance from, etc.
+
+        // Sets up the aspects of the game
+        player1 = new Player(Alliance.WHITE);
+        player2 = new Player(Alliance.BLACK);
+
+        board = new Board(this);
+        pieceManager = new PieceManager(board);
+
+        // Sets up the board
+        createBoard();
     }
 
-    public void init() {
-        // TODO: Temporary for testing, this would set up the board
-        makePiece(0, 0, Type.QUEEN, Alliance.BLACK);
+    private void createBoard() {
+        // TODO: Make this set up an existing game if they open a previously played game
+
+        pieceManager.makePiece(0, 7, Type.ROOK, Alliance.WHITE);
+        pieceManager.makePiece(1, 7, Type.KNIGHT, Alliance.WHITE);
+        pieceManager.makePiece(2, 7, Type.BISHOP, Alliance.WHITE);
+        pieceManager.makePiece(3, 7, Type.QUEEN, Alliance.WHITE);
+        pieceManager.makePiece(4, 7, Type.KING, Alliance.WHITE);
+        pieceManager.makePiece(5, 7, Type.BISHOP, Alliance.WHITE);
+        pieceManager.makePiece(6, 7, Type.KNIGHT, Alliance.WHITE);
+        pieceManager.makePiece(7, 7, Type.ROOK, Alliance.WHITE);
+
+        pieceManager.makePiece(0, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(1, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(2, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(3, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(4, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(5, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(6, 6, Type.PAWN, Alliance.WHITE);
+        pieceManager.makePiece(7, 6, Type.PAWN, Alliance.WHITE);
+
+        pieceManager.makePiece(0, 0, Type.ROOK, Alliance.BLACK);
+        pieceManager.makePiece(1, 0, Type.KNIGHT, Alliance.BLACK);
+        pieceManager.makePiece(2, 0, Type.BISHOP, Alliance.BLACK);
+        pieceManager.makePiece(3, 0, Type.QUEEN, Alliance.BLACK);
+        pieceManager.makePiece(4, 0, Type.KING, Alliance.BLACK);
+        pieceManager.makePiece(5, 0, Type.BISHOP, Alliance.BLACK);
+        pieceManager.makePiece(6, 0, Type.KNIGHT, Alliance.BLACK);
+        pieceManager.makePiece(7, 0, Type.ROOK, Alliance.BLACK);
+
+        pieceManager.makePiece(0, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(1, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(2, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(3, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(4, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(5, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(6, 1, Type.PAWN, Alliance.BLACK);
+        pieceManager.makePiece(7, 1, Type.PAWN, Alliance.BLACK);
+
+        // Sets the player's turn
+        turn = true;
     }
 
-    public BufferedImage renderBoard() {
+    private Player getCurrentPlayer() {
+        if (turn) {
+            return player1;
+        } else {
+            return player2;
+        }
+    }
 
-        // TODO: Set the board size based on the screen size (take in parameters for the board size)
-        BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+    public BufferedImage getRenderedGame() {
+        // TODO: Render sizes based on what the window size is (take in parameters for the board)
+        // TODO: Maybe add a background just in case
+
+        // Creates the image
+        BufferedImage image = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
 
-        // TODO: Draw the board texture and the piece textures
-        // g.setColor(Color.GREEN);
-        // g.fillRect(20, 20, 40, 40);
-
+        // Draws aspects
         board.drawBoard(g);
         pieceManager.drawPieces(g);
 
+        // Returns the image
         g.dispose();
         return image;
     }
 
-    public void makePiece(int x, int y, Type type, Alliance alliance) {
-
-        Piece piece = null;
-
-        // TODO: Change the piece type to create the right class type
-        switch (type) {
-            case PAWN: piece = new Pawn(x, y, alliance); break;
-            case BISHOP: piece = new Bishop(x, y, alliance); break;
-            case KING: piece = new King(x, y, alliance); break;
-            case KNIGHT: piece = new Knight(x, y, alliance); break;
-            case QUEEN: piece = new Queen(x, y, alliance); break;
-            case ROOK: piece = new Rook(x, y, alliance); break;
-            default: break; // TODO: Add a handle to this?
-        }
-
-        board.register(x, y, piece);
-        pieceManager.register(piece);
+    public Board getBoard() {
+        return board;
     }
 
-    public void move(int fromX, int fromY, int toX, int toY) {
-        // TODO: make this
+    public void clickCoordinates(int x, int y) {
+        // TODO: If the piece is moved, track it's movement (save move history)
+        // TODO: Add a check to make sure they aren't clicking outside of the board
+        
+        // TODO: Have a variable for the tile size so I dont have to use "45"
+        // Gets the tile coordinates
+        int tileX = (x - board.offsetX) / 45;
+        int tileY = (y - board.offsetY) / 45;
+
+        board.selectCoordinates(tileX, tileY, getCurrentPlayer().getAlliance());
+    }
+
+    public void nextTurn() {
+        // TODO: Add timer that switches to the person's turn
+
+        turn = !turn;
     }
 }

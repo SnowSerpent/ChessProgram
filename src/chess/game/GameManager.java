@@ -3,7 +3,7 @@ package chess.game;
 public class GameManager {
     
     // TODO: Make a list of games to be stored
-    Game game;
+    private Game game;
 
     public GameManager() {
 
