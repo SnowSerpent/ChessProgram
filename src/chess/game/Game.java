@@ -22,6 +22,7 @@ public class Game {
     public Game() {
 
         // TODO: Make player classes to store what player is the alliance from, etc.
+        // TODO: Add a win detection (maybe in Board)
 
         // Sets up the aspects of the game
         player1 = new Player(Alliance.WHITE);

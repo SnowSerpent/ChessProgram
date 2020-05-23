@@ -14,8 +14,21 @@ public class King extends Piece {
 
     @Override
     public boolean canMoveTo(int x, int y) {
-        // TODO: Make this
+        // TODO: Cant move into danger
 
-        return true;
+        // Makes sure it's not moving onto one of it's own pieces
+        if (board.getPiece(x, y) != null) {
+            if (board.getPiece(x, y).getAlliance() == alliance) {
+                return false;
+            }
+        }
+
+        // Move 1 square away
+        if (Math.abs(x - posX) <= 1 && Math.abs(y - posY) <= 1) {
+            return true;
+        }
+
+        // If conditions are not met, it will return false
+        return false;
     }
 }
